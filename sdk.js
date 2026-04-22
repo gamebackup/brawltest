@@ -1,4 +1,4 @@
-// sdk.js - Mock Yandex Games SDK for local/off‑Yandex hosting
+// sdk.js - Mock Yandex Games SDK (Updated with serverTime)
 const YaGames = {
     init: () => Promise.resolve({
         // Core player
@@ -92,9 +92,20 @@ const YaGames = {
         // Event handling
         on: (event, callback) => {
             console.log(`[YG Mock] Event "${event}" registered`);
-        }
+        },
+
+        // ** NEW: Server time method **
+        serverTime: () => {
+            // Return current Unix timestamp in milliseconds
+            // (Yandex SDK returns server time to prevent client clock cheating)
+            return Date.now();
+        },
+
+        // Some games also call these methods; include stubs to be safe
+        isInitialized: () => true,
+        getLanguage: () => "en",
+        getPlatform: () => "mock"
     })
 };
 
-// Log that mock is loaded
-console.log("[YG Mock] SDK loaded – YaGames defined");
+console.log("[YG Mock] SDK loaded – YaGames defined with serverTime");
